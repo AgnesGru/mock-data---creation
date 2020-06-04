@@ -29,6 +29,24 @@ products = {
     'LG Dryer': [600.00, 1]
 }
 
+
+def generate_random_address():
+    street_names = ['Main', '2nd', '1st', '4th', '5th', 'Park', '6th', '7th', 'Maple', 'Pine', 'Washington', '8th',
+                    'Cedar', 'Elm', 'Walnut', '9th', '10th', 'Lake', 'Sunset', 'Lincoln', 'Jackson', 'Church', 'River',
+                    '11th', 'Willow', 'Jefferson', 'Center', '12th', 'North', 'Lakeview', 'Ridge', 'Hickory', 'Adams',
+                    'Cherry', 'Highland', 'Johnson', 'South', 'Dogwood', 'West', 'Chestnut', '13th', 'Spruce', '14th',
+                    'Wilson', 'Meadow', 'Forest', 'Hill', 'Madison']
+    cities = ['San Francisco', 'Boston', 'New York City', 'Austin', 'Dallas', 'Atlanta', 'Portland', 'Portland',
+              'Los Angeles', 'Seattle']
+    weights = [9, 4, 5, 2, 3, 3, 2, 0.5, 6, 3]
+    zips = ['94016', '02215', '10001', '73301', '75001', '30301', '97035', '04101', '90001', '98101']
+    state = ['CA', 'MA', 'NY', 'TX', 'TX', 'GA', 'OR', 'ME', 'CA', 'WA']
+
+    street = random.choice(street_names)
+    index = random.choices(range(len(cities)), weights=weights[0])
+    return f"{random.randint(1, 999)} {street} St, {cities[index]}, {state[index]} {zips[index]} "
+
+
 product_list = [product for product in products]
 weights = [products[product][1] for product in products]
 
@@ -38,25 +56,28 @@ order_id = 143253
 
 for month_value in range(1, 13):
     if month_value <= 10:
-        orders_amount = int(numpy.random.normal(loc=12000, scale=4000))
+        # orders_amount = int(numpy.random.normal(loc=12000, scale=4000))
+        orders_amount = 100
 
-        if month_value == 11:
-            orders_amount = int(numpy.random.normal(loc=20000, scale=3000))
+    if month_value == 11:
+        orders_amount = int(numpy.random.normal(loc=20000, scale=3000))
 
-        if month_value == 12:
-            orders_amount = int(numpy.random.normal(loc=26000, scale=3000))
+    if month_value == 12:
+        orders_amount = int(numpy.random.normal(loc=26000, scale=3000))
 
-        df = pd.DataFrame(columns=columns)
+    df = pd.DataFrame(columns=columns)
 
-        for i in range(orders_amount):
+    for i in range(orders_amount):
+        address = generate_random_address()
 
-            product = random.choices(product_list, weights=weights)[0]
-            price = products[product]
-            df.loc[i] = [order_id, product, 1, price, 'NA', 'NA']
+        product = random.choices(product_list, weights=weights)[0]
+        price = products[product]
+        df.loc[i] = [order_id, product, 1, price, 'NA', address]
 
-            order_id += 1
+        order_id += 1
 
-        month_name = calendar.month_name[month_value]
-        print(month_name + 'Finished!!')
-        df.to_csv(f'{month_name}_data.csv')
-        break
+    month_name = calendar.month_name[month_value]
+    print(month_name + 'Finished!!')
+    df.to_csv(f'mock-data---creation/{month_name}_data.csv')
+    break
+# random address in each row
