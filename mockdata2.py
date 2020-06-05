@@ -1,4 +1,3 @@
-# Generating mock data in Python by using random.choice function. Data are saved in CSV format and stored. We start
 # from a simple example and move towards more realistic data. Thank you 'Keith_Galli' for your tutorials and ideas.
 import pandas as pd
 import random
@@ -40,11 +39,11 @@ def generate_random_address():
               'Los Angeles', 'Seattle']
     weights = [9, 4, 5, 2, 3, 3, 2, 0.5, 6, 3]
     zips = ['94016', '02215', '10001', '73301', '75001', '30301', '97035', '04101', '90001', '98101']
-    state = ['CA', 'MA', 'NY', 'TX', 'TX', 'GA', 'OR', 'ME', 'CA', 'WA']
+    states = ['CA', 'MA', 'NY', 'TX', 'TX', 'GA', 'OR', 'ME', 'CA', 'WA']
 
     street = random.choice(street_names)
-    index = random.choices(range(len(cities)), weights=weights[0])
-    return f"{random.randint(1, 999)} {street} St, {cities[index]}, {state[index]} {zips[index]} "
+    index = random.choices(range(len(cities)), weights=weights)[0]
+    return f"{random.randint(1, 999)} {street} St, {cities[index]}, {states[index]} {zips[index]} "
 
 
 product_list = [product for product in products]
@@ -60,10 +59,10 @@ for month_value in range(1, 13):
         orders_amount = 100
 
     if month_value == 11:
-        orders_amount = int(numpy.random.normal(loc=20000, scale=3000))
+        orders_amount = int(numpy.random.normal(loc=200, scale=30))
 
     if month_value == 12:
-        orders_amount = int(numpy.random.normal(loc=26000, scale=3000))
+        orders_amount = int(numpy.random.normal(loc=260, scale=30))
 
     df = pd.DataFrame(columns=columns)
 
@@ -71,13 +70,13 @@ for month_value in range(1, 13):
         address = generate_random_address()
 
         product = random.choices(product_list, weights=weights)[0]
-        price = products[product]
+        price = products[product][0]
         df.loc[i] = [order_id, product, 1, price, 'NA', address]
 
         order_id += 1
 
     month_name = calendar.month_name[month_value]
     print(month_name + 'Finished!!')
-    df.to_csv(f'mock-data---creation/{month_name}_data.csv')
-    break
-# random address in each row
+    df.to_csv(f'{month_name}_data.csv')
+
+
