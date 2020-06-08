@@ -72,8 +72,7 @@ order_id = 143253
 
 for month_value in range(1, 13):
     if month_value <= 10:
-        # orders_amount = int(numpy.random.normal(loc=12000, scale=4000))
-        orders_amount = 100
+        orders_amount = int(numpy.random.normal(loc=120, scale=40))
 
     if month_value == 11:
         orders_amount = int(numpy.random.normal(loc=200, scale=30))
