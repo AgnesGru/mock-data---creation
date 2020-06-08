@@ -28,6 +28,23 @@ products = {
     'LG Dryer': [600.00, 1]
 }
 
+columns = ['Order ID', 'Product', 'Quantity Ordered', 'Price Each', 'Order Date', 'Purchase Address']
+
+
+def generate_random_time(month):
+    # generate date in the format mm/dd/year-H-m
+    day_range = calendar.monthrange(2019, month)[1]
+    random_day = random.randint(1, day_range)
+
+    if random.random() < 0.5:  # we select peak at noon or at 8 pm
+        date = datetime.datetime(2019, month, random_day, 12, 0)
+    else:
+        date = datetime.datetime(2019, month, random_day, 20, 0)
+
+    time_offset = numpy.random.normal(loc=0, scale=180)
+    final_date = date + datetime.timedelta(minutes=time_offset)
+    return final_date.strftime('%m/%d/%y %H:%M')
+
 
 def generate_random_address():
     street_names = ['Main', '2nd', '1st', '4th', '5th', 'Park', '6th', '7th', 'Maple', 'Pine', 'Washington', '8th',
@@ -68,15 +85,15 @@ for month_value in range(1, 13):
 
     for i in range(orders_amount):
         address = generate_random_address()
+        date = generate_random_time(month_value)
 
         product = random.choices(product_list, weights=weights)[0]
         price = products[product][0]
-        df.loc[i] = [order_id, product, 1, price, 'NA', address]
+        quantity_order = numpy.random.geometric(p=1.0 - (1.0 / price), size=1)[0]
+        df.loc[i] = [order_id, product, quantity_order, price, date, address]
 
         order_id += 1
 
     month_name = calendar.month_name[month_value]
     print(month_name + 'Finished!!')
     df.to_csv(f'{month_name}_data.csv')
-
-
